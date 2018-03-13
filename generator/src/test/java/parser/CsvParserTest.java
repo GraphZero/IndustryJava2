@@ -12,6 +12,7 @@ class CsvParserTest {
         // given
         // when
         // then
-        CsvParser.getItems("D:\\Java Produkcyjna\\Lab 2\\w2Test\\generator\\src\\main\\resources\\items.txt");
+        CsvParser csvParser = new CsvParser();
+        csvParser.getItems("items.csv");
     }
 }

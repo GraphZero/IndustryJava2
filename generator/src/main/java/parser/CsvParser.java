@@ -13,8 +13,9 @@ import java.util.ArrayList;
 
 public class CsvParser {
 
-    public static ArrayList<Tuple<String, Double>> getItems(String path) throws IOException{
-        Reader in = new FileReader(path);
+    public ArrayList<Tuple<String, Double>> getItems(String path) throws IOException{
+        ClassLoader classLoader = getClass().getClassLoader();
+        Reader in = new FileReader(classLoader.getResource(path).getFile().replaceAll("%20", " "));
         Iterable<CSVRecord> records = CSVFormat
                 .newFormat(',')
                 .withHeader("name", "price")

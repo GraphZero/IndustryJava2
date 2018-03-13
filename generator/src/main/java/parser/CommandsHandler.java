@@ -19,11 +19,6 @@ public class CommandsHandler {
         cmd = parser.parse( options, args);
     }
 
-
-    public Collection<Option> getOptions() {
-        return options.getOptions();
-    }
-
     public CommandLine getCmd() {
         return cmd;
     }
