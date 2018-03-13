@@ -3,7 +3,7 @@ import jsons.JsonItem;
 import jsons.JsonTransaction;
 import parser.CsvParser;
 import parser.GenerateTransactionCommand;
-import utility.RandomHelper;
+import utility.RandomDataHelper;
 import utility.Tuple;
 
 import java.io.File;
@@ -28,9 +28,9 @@ public class TransactionGenerator {
     }
 
     public JsonTransaction generateSingleTransaction(GenerateTransactionCommand gTC, int id){
-        int randomCustomerId = RandomHelper.getRandomIntWithBound(gTC.getCustomerIdRange().getFirst(),gTC.getCustomerIdRange().getSecond() );
-        LocalDateTime randomDate = RandomHelper.getRandomDateTime(gTC.getDateRange());
-        int numberOfItems = RandomHelper.getRandomIntWithBound(gTC.getGeneratedItemsRange().getFirst(),gTC.getGeneratedItemsRange().getSecond() );
+        int randomCustomerId = RandomDataHelper.getRandomIntWithBound(gTC.getCustomerIdRange().getFirst(),gTC.getCustomerIdRange().getSecond() );
+        LocalDateTime randomDate = RandomDataHelper.getRandomDateTime(gTC.getDateRange());
+        int numberOfItems = RandomDataHelper.getRandomIntWithBound(gTC.getGeneratedItemsRange().getFirst(),gTC.getGeneratedItemsRange().getSecond() );
         ArrayList<JsonItem> items = generateItems(gTC, numberOfItems);
         return new JsonTransaction(id,
                 randomDate.toString(),
@@ -44,7 +44,7 @@ public class TransactionGenerator {
     protected ArrayList<JsonItem> generateItems(GenerateTransactionCommand gTC, int quantity){
         ArrayList<JsonItem> items = new ArrayList<>();
         for (int i = 0; i < quantity; i++) {
-            int quantityOfItem = RandomHelper.getRandomIntWithBound(gTC.getItemsQuantityRange().getFirst(),gTC.getItemsQuantityRange().getSecond() );
+            int quantityOfItem = RandomDataHelper.getRandomIntWithBound(gTC.getItemsQuantityRange().getFirst(),gTC.getItemsQuantityRange().getSecond() );
             int randomItem =  new Random().nextInt(rawItems.size());
             items.add(new JsonItem(rawItems.get(randomItem).getFirst(),
                     quantityOfItem,

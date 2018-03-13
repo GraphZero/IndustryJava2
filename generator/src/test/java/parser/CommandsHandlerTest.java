@@ -1,8 +1,12 @@
 package parser;
 
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.ParseException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CommandsHandlerTest {
     private CommandsHandler commandsHandler;
@@ -11,21 +15,17 @@ public class CommandsHandlerTest {
     @BeforeEach
     public void setUpCommandsHandler() throws ParseException{
         String[] args = {
-                "-customerIds", "1:20",
-                "-dateRange", "2018-03-08T00:00:00.000-0100:2018-03-08T23:59:59.999-0100",
-                "-itemsFile", "items.csv",
-                "-itemsCount", "5:15",
-                "-itemsQuantity", "1:30",
-                "-eventsCount", "1000",
-                "-outDir", "./output",
+                "-customerIds", "1:20"
         };
         commandsHandler = new CommandsHandler(args);
     }
 
     @Test
-    void shouldParse() {
+    void shouldParseCommandLine() {
         // given
+        CommandLine commandLine = commandsHandler.getCmd();
         // when
         // then
+        assertEquals("1:20", commandLine.getOptionValue("customerIds"), "CommandsHandler didnt parse argument");
     }
 }

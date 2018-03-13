@@ -3,7 +3,7 @@ package utility;
 import java.time.LocalDateTime;
 import java.util.Random;
 
-public class RandomHelper {
+public class RandomDataHelper {
     private static final Random r = new Random();
 
     public static int getRandomIntWithBound(int lower, int upper){

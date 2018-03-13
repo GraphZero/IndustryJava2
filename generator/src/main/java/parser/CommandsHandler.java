@@ -1,8 +1,10 @@
 package parser;
+import lombok.Getter;
 import org.apache.commons.cli.*;
 
 import java.util.Collection;
 
+@Getter
 public class CommandsHandler {
     private final Options options = new Options();
     private final CommandLineParser parser = new DefaultParser();
@@ -19,7 +21,4 @@ public class CommandsHandler {
         cmd = parser.parse( options, args);
     }
 
-    public CommandLine getCmd() {
-        return cmd;
-    }
 }
