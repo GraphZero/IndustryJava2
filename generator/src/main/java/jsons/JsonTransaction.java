@@ -6,7 +6,7 @@ import java.util.ArrayList;
 @Value
 public class JsonTransaction {
     private long id;
-    private LocalDateTime timeStamp;
+    private String timeStamp;
     private long customer_id;
     private ArrayList<JsonItem> jsonItems;
     private double sum;

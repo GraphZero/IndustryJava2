@@ -4,7 +4,6 @@ import org.apache.commons.cli.CommandLine;
 import parser.GenerateTransactionCommand;
 
 import java.time.LocalDateTime;
-import java.time.temporal.TemporalAmount;
 
 public class StringCommandToTransactionCommandConverter {
 

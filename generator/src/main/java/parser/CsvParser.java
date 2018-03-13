@@ -13,15 +13,17 @@ import java.util.ArrayList;
 
 public class CsvParser {
 
-    public static ArrayList<Tuple<String, String>> getItems(String path) throws IOException{
+    public static ArrayList<Tuple<String, Double>> getItems(String path) throws IOException{
         Reader in = new FileReader(path);
         Iterable<CSVRecord> records = CSVFormat
                 .newFormat(',')
                 .withHeader("name", "price")
                 .parse(in);
-        ArrayList<Tuple<String, String>> items = new ArrayList<>();
+        records.iterator().next();
+        ArrayList<Tuple<String, Double>> items = new ArrayList<>();
+
         for (CSVRecord record : records) {
-            items.add( new Tuple<>( record.get("name"), record.get("price")));
+            items.add( new Tuple<>( record.get("name"), Double.parseDouble( record.get("price"))));
         }
         return items;
     }
