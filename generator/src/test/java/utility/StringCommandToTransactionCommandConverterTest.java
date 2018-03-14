@@ -30,7 +30,7 @@ class StringCommandToTransactionCommandConverterTest {
         // given
         // when
         // then
-        assertEquals( 1000, StringCommandToTransactionCommandConverter.convert(commandsHandler.getCmd()).getEventsCount());
+        assertEquals( 1000, StringCommandToTransactionCommandConverter.convert(commandsHandler.getCmd()).get().getEventsCount());
 
     }
 }

@@ -1,22 +1,31 @@
 package utility;
 
+import com.sun.org.apache.xpath.internal.SourceTree;
 import org.apache.commons.cli.CommandLine;
 import parser.GenerateTransactionCommand;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 public class StringCommandToTransactionCommandConverter {
 
-    public static GenerateTransactionCommand convert(CommandLine commandLine){
-        return new GenerateTransactionCommand(
-                parseRange(commandLine.getOptionValue("customerIds", "1:5")),
-                parseDateRange(commandLine.getOptionValue("dateRange", LocalDateTime.now() + "-0100:" + LocalDateTime.now().plusDays(1))),
-                parseRange(commandLine.getOptionValue("itemsCount", "1:5")),
-                parseRange(commandLine.getOptionValue("itemsQuantity", "1:5")),
-                Long.parseLong( commandLine.getOptionValue("eventsCount", "100") ),
-                commandLine.getOptionValue("itemsFile", "/"),
-                commandLine.getOptionValue("outDir", "/")
-        );
+    public static Optional<GenerateTransactionCommand> convert(CommandLine commandLine){
+        GenerateTransactionCommand generateTransactionCommand = null;
+        try{
+             generateTransactionCommand =  new GenerateTransactionCommand(
+                    parseRange(commandLine.getOptionValue("customerIds", "1:5")),
+                    parseDateRange(commandLine.getOptionValue("dateRange", LocalDateTime.now() + "-0100:" + LocalDateTime.now().plusDays(1))),
+                    parseRange(commandLine.getOptionValue("itemsCount", "1:5")),
+                    parseRange(commandLine.getOptionValue("itemsQuantity", "1:5")),
+                    Long.parseLong( commandLine.getOptionValue("eventsCount", "100") ),
+                    commandLine.getOptionValue("itemsFile", "/"),
+                    commandLine.getOptionValue("outDir", "/")
+            );
+        } catch(NumberFormatException e){
+            System.out.println("Wrong parameters!");
+            return Optional.empty();
+        }
+        return Optional.ofNullable(generateTransactionCommand);
     }
 
     public static Tuple<Integer, Integer> parseRange(String s){
