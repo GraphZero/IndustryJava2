@@ -5,6 +5,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import parser.CommandsHandler;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 class StringCommandToTransactionCommandConverterTest {
     private CommandsHandler commandsHandler;
 
@@ -24,11 +26,11 @@ class StringCommandToTransactionCommandConverterTest {
     }
 
     @Test
-    void convert() {
+    void shouldConvert() {
         // given
         // when
         // then
+        assertEquals( 1000, StringCommandToTransactionCommandConverter.convert(commandsHandler.getCmd()).getEventsCount());
 
-        System.out.println(StringCommandToTransactionCommandConverter.convert(commandsHandler.getCmd()));
     }
 }

@@ -24,7 +24,6 @@ class CsvParserTest {
         // when
         ArrayList<Tuple<String, Double>> items = csvParser.getItems(fileName);
         // then
-        System.out.println(items);
         assertEquals(3, items.size());
     }
 }

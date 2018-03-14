@@ -41,7 +41,7 @@ public class TransactionGenerator {
 
     }
 
-    protected ArrayList<JsonItem> generateItems(GenerateTransactionCommand gTC, int quantity){
+    private ArrayList<JsonItem> generateItems(GenerateTransactionCommand gTC, int quantity){
         ArrayList<JsonItem> items = new ArrayList<>();
         for (int i = 0; i < quantity; i++) {
             int quantityOfItem = RandomDataHelper.getRandomIntWithBound(gTC.getItemsQuantityRange().getFirst(),gTC.getItemsQuantityRange().getSecond() );
