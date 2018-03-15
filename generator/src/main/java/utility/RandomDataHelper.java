@@ -7,6 +7,7 @@ public class RandomDataHelper {
     private static final Random r = new Random();
 
     public static int getRandomIntWithBound(int lower, int upper){
+
         return r.nextInt(upper - lower) + lower;
     }
 

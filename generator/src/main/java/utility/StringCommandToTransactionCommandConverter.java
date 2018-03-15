@@ -9,8 +9,8 @@ import java.util.Optional;
 
 public class StringCommandToTransactionCommandConverter {
 
-    public static Optional<GenerateTransactionCommand> convert(CommandLine commandLine){
-        GenerateTransactionCommand generateTransactionCommand = null;
+    public Optional<GenerateTransactionCommand> convert(CommandLine commandLine){
+        GenerateTransactionCommand generateTransactionCommand;
         try{
              generateTransactionCommand =  new GenerateTransactionCommand(
                     parseRange(commandLine.getOptionValue("customerIds", "1:5")),
@@ -28,15 +28,19 @@ public class StringCommandToTransactionCommandConverter {
         return Optional.ofNullable(generateTransactionCommand);
     }
 
-    public static Tuple<Integer, Integer> parseRange(String s){
+    public Tuple<Integer, Integer> parseRange(String s){
         String[] idRange = s.trim().split(":");
+        if ( Integer.parseInt(idRange[0]) < 0 || Integer.parseInt(idRange[1]) < 0){
+            throw new WrongRangeException();
+        }
         return new Tuple<>(Integer.parseInt(idRange[0]), Integer.parseInt(idRange[1]));
     }
 
-    public static Tuple<LocalDateTime, LocalDateTime> parseDateRange(String s){
+    public Tuple<LocalDateTime, LocalDateTime> parseDateRange(String s){
         String[] idRange = s.trim().split("-0100:");
         return new Tuple<>(LocalDateTime.parse(idRange[0] ), LocalDateTime.parse(idRange[1].replaceAll("-0100", "") ));
     }
 
+    class WrongRangeException extends RuntimeException{}
 
 }

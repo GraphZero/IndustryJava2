@@ -1,6 +1,5 @@
 package parser;
 
-import jsons.JsonItem;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import utility.Tuple;
@@ -13,13 +12,30 @@ import java.util.ArrayList;
 
 public class CsvParser {
 
-    public ArrayList<Tuple<String, Double>> getItems(String path) throws IOException{
+    public ArrayList<Tuple<String, Double>> getItems(String path){
         ClassLoader classLoader = getClass().getClassLoader();
-        Reader in = new FileReader(classLoader.getResource(path).getFile().replaceAll("%20", " "));
-        Iterable<CSVRecord> records = CSVFormat
-                .newFormat(',')
-                .withHeader("name", "price")
-                .parse(in);
+        Reader in;
+        try {
+            in = new FileReader(classLoader.getResource(path).getFile().replaceAll("%20", " "));
+        } catch (FileNotFoundException e) {
+            System.out.println("Couldnt find item file!");
+            throw new InputItemFileNotFoundException();
+        }
+        Iterable<CSVRecord> records;
+        try {
+            records = CSVFormat
+                    .newFormat(',')
+                    .withHeader("name", "price")
+                    .parse(in);
+        } catch (IOException e) {
+            System.out.println("Couldnt parse items!");
+            throw new InputParseFileException();
+        }
+
+        return returnItems(records);
+    }
+
+    protected ArrayList<Tuple<String, Double>> returnItems(Iterable<CSVRecord> records){
         records.iterator().next();
         ArrayList<Tuple<String, Double>> items = new ArrayList<>();
 
@@ -28,5 +44,8 @@ public class CsvParser {
         }
         return items;
     }
+
+    class InputItemFileNotFoundException extends RuntimeException{ }
+    class InputParseFileException extends RuntimeException{ }
 
 }

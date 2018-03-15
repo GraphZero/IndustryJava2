@@ -1,50 +1,57 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jsons.JsonItem;
 import jsons.JsonTransaction;
+import lombok.Setter;
 import parser.CsvParser;
 import parser.GenerateTransactionCommand;
-import utility.RandomDataHelper;
-import utility.Tuple;
 
+import utility.Tuple;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Random;
 
+import static utility.RandomDataHelper.getRandomDateTime;
+import static utility.RandomDataHelper.getRandomIntWithBound;
+
 public class TransactionGenerator {
+    private final CsvParser csvParser;
+    private final ArrayList<Tuple<String, Double>> rawItems;
+    private final ObjectMapper objectMapper;
+    @Setter
+    private GenerateTransactionCommand command;
 
-    private final CsvParser csvParser = new CsvParser();
-    private ArrayList<Tuple<String, Double>> rawItems;
+    public TransactionGenerator(GenerateTransactionCommand command) throws IOException {
+        this.command = command;
+        csvParser = new CsvParser();
+        rawItems = csvParser.getItems(command.getItemsFilePath());
+        objectMapper = new ObjectMapper();
+    }
 
-    public void generateTransactions(GenerateTransactionCommand gTC) throws IOException{
+    public void generateTransactions() throws IOException{
         ArrayList<JsonTransaction> transactionsToSave = new ArrayList<>();
-        rawItems = csvParser.getItems(gTC.getItemsFilePath());
-        for (int i = 1; i <= gTC.getEventsCount(); i++) {
-            transactionsToSave.add(generateSingleTransaction(gTC, i ));
+        for (int i = 1; i <= command.getEventsCount(); i++) {
+            transactionsToSave.add(generateSingleTransaction(command, i ));
         }
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.writeValue(new File(gTC.getOutFilePath()+ ".json"), transactionsToSave);
+        objectMapper.writeValue(new File(command.getOutFilePath()+ ".json"), transactionsToSave);
     }
 
     public JsonTransaction generateSingleTransaction(GenerateTransactionCommand gTC, int id){
-        int randomCustomerId = RandomDataHelper.getRandomIntWithBound(gTC.getCustomerIdRange().getFirst(),gTC.getCustomerIdRange().getSecond() );
-        LocalDateTime randomDate = RandomDataHelper.getRandomDateTime(gTC.getDateRange());
-        int numberOfItems = RandomDataHelper.getRandomIntWithBound(gTC.getGeneratedItemsRange().getFirst(),gTC.getGeneratedItemsRange().getSecond() );
-        ArrayList<JsonItem> items = generateItems(gTC, numberOfItems);
+        ArrayList<JsonItem> items = generateItems(gTC,
+                getRandomIntWithBound(gTC.getGeneratedItemsRange().getFirst(),gTC.getGeneratedItemsRange().getSecond()
+                ));
         return new JsonTransaction(id,
-                randomDate.toString(),
-                randomCustomerId,
+                getRandomDateTime(gTC.getDateRange()).toString(),
+                getRandomIntWithBound(gTC.getCustomerIdRange().getFirst(),gTC.getCustomerIdRange().getSecond() ),
                 items,
                 items.stream().mapToDouble( x -> x.getQuantity() * x.getPrice()).sum());
-
-
     }
 
     private ArrayList<JsonItem> generateItems(GenerateTransactionCommand gTC, int quantity){
         ArrayList<JsonItem> items = new ArrayList<>();
         for (int i = 0; i < quantity; i++) {
-            int quantityOfItem = RandomDataHelper.getRandomIntWithBound(gTC.getItemsQuantityRange().getFirst(),gTC.getItemsQuantityRange().getSecond() );
+            int quantityOfItem = getRandomIntWithBound(gTC.getItemsQuantityRange().getFirst(),gTC.getItemsQuantityRange().getSecond() );
             int randomItem =  new Random().nextInt(rawItems.size());
             items.add(new JsonItem(rawItems.get(randomItem).getFirst(),
                     quantityOfItem,

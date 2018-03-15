@@ -2,7 +2,6 @@ package parser;
 import lombok.Getter;
 import org.apache.commons.cli.*;
 
-import java.util.Collection;
 
 @Getter
 public class CommandsHandler {
