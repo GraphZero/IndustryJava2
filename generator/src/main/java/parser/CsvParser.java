@@ -2,6 +2,8 @@ package parser;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import utility.Tuple;
 
 import java.io.FileNotFoundException;
@@ -11,6 +13,7 @@ import java.io.Reader;
 import java.util.ArrayList;
 
 public class CsvParser {
+    private static final Logger logger = LogManager.getLogger(CsvParser.class);
 
     public ArrayList<Tuple<String, Double>> getItems(String path){
         ClassLoader classLoader = getClass().getClassLoader();
@@ -26,15 +29,15 @@ public class CsvParser {
                             .parse(in);
                     return returnItems(records);
                 } catch (IOException e) {
-                    System.out.println("Couldnt parse items!");
+                    logger.error("Couldnt parse items!");
                     throw new InputParseFileException();
                 }
             } else{
-                System.out.println("Coudlnt find item file.");
+                logger.error("Coudlnt find item file.");
                 throw new InputItemFileNotFoundException();
             }
         } catch (FileNotFoundException e) {
-            System.out.println("Couldnt find item file!");
+            logger.error("Couldnt find item file!");
             throw new InputItemFileNotFoundException();
         }
     }

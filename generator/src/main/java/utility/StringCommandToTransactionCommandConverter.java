@@ -1,12 +1,16 @@
 package utility;
 
 import org.apache.commons.cli.CommandLine;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import parser.CsvParser;
 import parser.GenerateTransactionCommand;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 
 public class StringCommandToTransactionCommandConverter {
+    private static final Logger logger = LogManager.getLogger(StringCommandToTransactionCommandConverter.class);
 
     public Optional<GenerateTransactionCommand> convert(CommandLine commandLine){
         GenerateTransactionCommand generateTransactionCommand;
@@ -21,7 +25,7 @@ public class StringCommandToTransactionCommandConverter {
                     commandLine.getOptionValue("outDir", "/")
             );
         } catch(NumberFormatException e){
-            System.out.println("Wrong parameters!");
+            logger.error("Wrong command parameters!");
             return Optional.empty();
         }
         return Optional.ofNullable(generateTransactionCommand);
