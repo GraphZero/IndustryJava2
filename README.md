@@ -1,5 +1,6 @@
 # IndustryJava2
 
+# Lab 2
 
 ## Zad 1
 Poprawiony serwis: w2Test\src\main\java\uj\jwzp\w2\e3\SellingService.java  
