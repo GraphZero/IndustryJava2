@@ -1,5 +1,6 @@
 import org.apache.commons.cli.*;
 import parser.CommandsHandler;
+import parser.CsvParser;
 import parser.GenerateTransactionCommand;
 import utility.StringCommandToTransactionCommandConverter;
 
@@ -9,17 +10,19 @@ public class Generator {
 
     public static void main(String[] args) throws ParseException{
         CommandsHandler commandsHandler = new CommandsHandler(args);
-        StringCommandToTransactionCommandConverter
+        new StringCommandToTransactionCommandConverter()
                 .convert(commandsHandler.getCmd())
                 .ifPresent( generateTransactionCommand-> {
-                    TransactionGenerator transactionGenerator = new TransactionGenerator();
                     try {
-                        transactionGenerator.generateTransactions(generateTransactionCommand);
+                        TransactionGenerator transactionGenerator = new TransactionGenerator(generateTransactionCommand);
+                        transactionGenerator.generateTransactions();
                     } catch (IOException e) {
                         System.out.println("Couldnt generate transactions" + e.getMessage());
                     }
+                    catch (CsvParser.InputItemFileNotFoundException e) {
+                        System.out.println("Couldnt find input file" );
+                    }
                 });
-
     }
 
 

@@ -14,25 +14,29 @@ public class CsvParser {
 
     public ArrayList<Tuple<String, Double>> getItems(String path){
         ClassLoader classLoader = getClass().getClassLoader();
+        Iterable<CSVRecord> records;
         Reader in;
         try {
-            in = new FileReader(classLoader.getResource(path).getFile().replaceAll("%20", " "));
+            if ( classLoader.getResource(path) != null ){
+                in = new FileReader(classLoader.getResource(path).getFile().replaceAll("%20", " "));
+                try {
+                    records = CSVFormat
+                            .newFormat(',')
+                            .withHeader("name", "price")
+                            .parse(in);
+                    return returnItems(records);
+                } catch (IOException e) {
+                    System.out.println("Couldnt parse items!");
+                    throw new InputParseFileException();
+                }
+            } else{
+                System.out.println("Coudlnt find item file.");
+                throw new InputItemFileNotFoundException();
+            }
         } catch (FileNotFoundException e) {
             System.out.println("Couldnt find item file!");
             throw new InputItemFileNotFoundException();
         }
-        Iterable<CSVRecord> records;
-        try {
-            records = CSVFormat
-                    .newFormat(',')
-                    .withHeader("name", "price")
-                    .parse(in);
-        } catch (IOException e) {
-            System.out.println("Couldnt parse items!");
-            throw new InputParseFileException();
-        }
-
-        return returnItems(records);
     }
 
     protected ArrayList<Tuple<String, Double>> returnItems(Iterable<CSVRecord> records){
@@ -45,7 +49,7 @@ public class CsvParser {
         return items;
     }
 
-    class InputItemFileNotFoundException extends RuntimeException{ }
-    class InputParseFileException extends RuntimeException{ }
+    public class InputItemFileNotFoundException extends RuntimeException{ }
+    public class InputParseFileException extends RuntimeException{ }
 
 }

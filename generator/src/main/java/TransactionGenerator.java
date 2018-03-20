@@ -22,7 +22,7 @@ public class TransactionGenerator {
     @Setter
     private GenerateTransactionCommand command;
 
-    public TransactionGenerator(GenerateTransactionCommand command) throws IOException {
+    public TransactionGenerator(GenerateTransactionCommand command){
         this.command = command;
         csvParser = new CsvParser();
         rawItems = csvParser.getItems(command.getItemsFilePath());

@@ -55,4 +55,5 @@ class StringCommandToTransactionCommandConverterTest {
                 () -> converter.convert(commandsHandler.getCmd()));
     }
 
+
 }

@@ -13,12 +13,13 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class CsvParserTest {
     private final String fileName = "testItems.csv";
 
     @Test
-    void shouldReturnItemsFromCsvFileInResourcesFolder() throws IOException{
+    void shouldReturnItemsFromCsvFileInResourcesFolder(){
         // given
         CsvParser csvParser = new CsvParser();
         // when
@@ -26,4 +27,14 @@ class CsvParserTest {
         // then
         assertEquals(3, items.size());
     }
+
+    @Test
+    void shouldntFindFile(){
+        // given
+        CsvParser csvParser = new CsvParser();
+        // when
+        // then
+        assertThrows(CsvParser.InputItemFileNotFoundException.class, () -> csvParser.getItems("asdasdasd"));
+    }
+
 }
