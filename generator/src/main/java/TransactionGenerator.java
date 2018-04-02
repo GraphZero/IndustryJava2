@@ -2,13 +2,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jsons.JsonItem;
 import jsons.JsonTransaction;
 import lombok.Setter;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import parser.CsvParser;
 import parser.GenerateTransactionCommand;
-
 import utility.Tuple;
+
 import java.io.File;
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -16,6 +17,7 @@ import static utility.RandomDataHelper.getRandomDateTime;
 import static utility.RandomDataHelper.getRandomIntWithBound;
 
 public class TransactionGenerator {
+    private static final Logger logger = LogManager.getLogger(TransactionGenerator.class);
     private final CsvParser csvParser;
     private final ArrayList<Tuple<String, Double>> rawItems;
     private final ObjectMapper objectMapper;

@@ -20,14 +20,20 @@
         </Console>
     </Appenders>
     <Loggers>
-        <Logger name="Generator" level="error" additivity="true">
-            <appender-ref ref="fileLogger" level="error" />
+        <Logger name="Generator" level="info" additivity="true">
+            <appender-ref ref="fileLogger" level="info" />
         </Logger>
-        <Logger name="CsvParser" level="error" additivity="true">
-            <appender-ref ref="fileLogger" level="error" />
+        <Logger name="CsvParser" level="info" additivity="true">
+            <appender-ref ref="fileLogger" level="info" />
+        </Logger>
+        <Logger name="StringCommandToTransactionCommandConverter" level="info" additivity="true">
+            <appender-ref ref="console" level="info" />
+        </Logger>
+        <Logger name="TransactionGenerator" level="info" additivity="true">
+            <appender-ref ref="console" level="info" />
         </Logger>
         <Root level="info" additivity="false">
-            <appender-ref ref="info" />
+            <appender-ref ref="console" />
         </Root>
     </Loggers>
 </Configuration>

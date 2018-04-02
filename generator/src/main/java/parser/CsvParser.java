@@ -27,17 +27,18 @@ public class CsvParser {
                             .newFormat(',')
                             .withHeader("name", "price")
                             .parse(in);
+                    logger.info("Successfully parsed items from csv file.");
                     return returnItems(records);
                 } catch (IOException e) {
-                    logger.error("Couldnt parse items!");
+                    logger.error("Couldn't parse items!");
                     throw new InputParseFileException();
                 }
             } else{
-                logger.error("Coudlnt find item file.");
+                logger.error("Couldn't find item file.");
                 throw new InputItemFileNotFoundException();
             }
         } catch (FileNotFoundException e) {
-            logger.error("Couldnt find item file!");
+            logger.error("Couldn't find item file!");
             throw new InputItemFileNotFoundException();
         }
     }

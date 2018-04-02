@@ -3,7 +3,6 @@ package utility;
 import org.apache.commons.cli.CommandLine;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import parser.CsvParser;
 import parser.GenerateTransactionCommand;
 
 import java.time.LocalDateTime;
@@ -24,6 +23,7 @@ public class StringCommandToTransactionCommandConverter {
                     commandLine.getOptionValue("itemsFile", "/"),
                     commandLine.getOptionValue("outDir", "/")
             );
+            logger.info("Successfully converted command.");
         } catch(NumberFormatException e){
             logger.error("Wrong command parameters!");
             return Optional.empty();
