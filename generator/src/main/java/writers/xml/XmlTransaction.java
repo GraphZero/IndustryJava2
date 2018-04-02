@@ -1,9 +1,6 @@
 package writers.xml;
 
 import generators.Transaction;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.Value;
 import writers.json.JsonItem;
 
 import javax.xml.bind.annotation.XmlRootElement;

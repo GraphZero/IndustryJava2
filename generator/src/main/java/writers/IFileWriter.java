@@ -4,6 +4,6 @@ import generators.Transaction;
 
 import java.util.ArrayList;
 
-public interface IFileWriter {
-    void writeValue(String filePath, ArrayList<Transaction> transactionsToSave);
+public interface IFileWriter<T extends Transaction> {
+    void writeValue(String filePath, ArrayList<T> transactionsToSave);
 }

@@ -11,7 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class JsonFileWriter implements IFileWriter {
+public class JsonFileWriter implements IFileWriter<JsonTransaction> {
     private static final Logger logger = LogManager.getLogger(TransactionGenerator.class);
     private final ObjectMapper objectMapper;
 
@@ -20,7 +20,7 @@ public class JsonFileWriter implements IFileWriter {
     }
 
     @Override
-    public void writeValue(String filePath, ArrayList<Transaction> transactionsToSave){
+    public void writeValue(String filePath, ArrayList<JsonTransaction> transactionsToSave){
         try {
             objectMapper.writeValue(new File(filePath+ ".json"), transactionsToSave);
             logger.info("Saved transactions.");

@@ -5,10 +5,10 @@ import writers.IFileWriter;
 
 import java.util.ArrayList;
 
-public class XmlFileWriter implements IFileWriter {
+public class XmlFileWriter implements IFileWriter<XmlTransaction> {
 
     @Override
-    public void writeValue(String filePath, ArrayList<Transaction> transactionsToSave) {
+    public void writeValue(String filePath, ArrayList<XmlTransaction> transactionsToSave) {
 
     }
 }

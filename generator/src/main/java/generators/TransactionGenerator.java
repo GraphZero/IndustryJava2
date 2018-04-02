@@ -33,12 +33,12 @@ public class TransactionGenerator {
     public void generateTransactions() {
         ArrayList<Transaction> transactionsToSave = new ArrayList<>();
         for (int i = 1; i <= command.getEventsCount(); i++) {
-            transactionsToSave.add(generateSingleTransaction(i));
+            transactionsToSave.add(generateSingleJsonTransaction(i));
         }
         fileWriter.writeValue(command.getOutFilePath(), transactionsToSave);
     }
 
-    public Transaction generateSingleTransaction(int id) {
+    public Transaction generateSingleJsonTransaction(int id) {
         ArrayList<JsonItem> items =
                 generateItems(command, getRandomIntWithBound(command.getGeneratedItemsRange().getFirst(), command.getGeneratedItemsRange().getSecond()));
         return new JsonTransaction(id,

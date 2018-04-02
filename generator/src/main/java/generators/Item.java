@@ -10,4 +10,7 @@ public abstract class Item {
     protected String name;
     protected long quantity;
     protected double price;
+
+
+
 }
