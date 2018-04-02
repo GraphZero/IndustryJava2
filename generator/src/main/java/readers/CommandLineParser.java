@@ -1,17 +1,18 @@
-package utility;
+package readers;
 
+import generators.GenerateTransactionCommand;
 import org.apache.commons.cli.CommandLine;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import parser.GenerateTransactionCommand;
+import utility.Tuple;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-public class StringCommandToTransactionCommandConverter {
-    private static final Logger logger = LogManager.getLogger(StringCommandToTransactionCommandConverter.class);
+public class CommandLineParser {
+    private static final Logger logger = LogManager.getLogger(CommandLineParser.class);
 
-    public Optional<GenerateTransactionCommand> convert(CommandLine commandLine){
+    public Optional<GenerateTransactionCommand> parseCommandLine(CommandLine commandLine){
         GenerateTransactionCommand generateTransactionCommand;
         try{
              generateTransactionCommand =  new GenerateTransactionCommand(
@@ -31,7 +32,7 @@ public class StringCommandToTransactionCommandConverter {
         return Optional.ofNullable(generateTransactionCommand);
     }
 
-    public Tuple<Integer, Integer> parseRange(String s){
+    protected Tuple<Integer, Integer> parseRange(String s){
         String[] idRange = s.trim().split(":");
         if ( Integer.parseInt(idRange[0]) < 0 || Integer.parseInt(idRange[1]) < 0){
             throw new WrongRangeException();
@@ -39,11 +40,11 @@ public class StringCommandToTransactionCommandConverter {
         return new Tuple<>(Integer.parseInt(idRange[0]), Integer.parseInt(idRange[1]));
     }
 
-    public Tuple<LocalDateTime, LocalDateTime> parseDateRange(String s){
+    protected Tuple<LocalDateTime, LocalDateTime> parseDateRange(String s){
         String[] idRange = s.trim().split("-0100:");
         return new Tuple<>(LocalDateTime.parse(idRange[0] ), LocalDateTime.parse(idRange[1].replaceAll("-0100", "") ));
     }
 
-    class WrongRangeException extends RuntimeException{}
+    public class WrongRangeException extends RuntimeException{}
 
 }

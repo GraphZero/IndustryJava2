@@ -4,11 +4,12 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.ParseException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import readers.CommandLineReader;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class CommandsHandlerTest {
-    private CommandsHandler commandsHandler;
+public class CommandLineReaderTest {
+    private CommandLineReader commandLineReader;
 
 
     @BeforeEach
@@ -16,15 +17,15 @@ public class CommandsHandlerTest {
         String[] args = {
                 "-customerIds", "1:20"
         };
-        commandsHandler = new CommandsHandler(args);
+        commandLineReader = CommandLineReader.readCommandLines(args);
     }
 
     @Test
     void shouldParseCommandLine() {
         // given
-        CommandLine commandLine = commandsHandler.getCmd();
+        CommandLine commandLine = commandLineReader.getCmd();
         // when
         // then
-        assertEquals("1:20", commandLine.getOptionValue("customerIds"), "CommandsHandler didnt parse argument");
+        assertEquals("1:20", commandLine.getOptionValue("customerIds"), "CommandLineReader didn't parse argument");
     }
 }

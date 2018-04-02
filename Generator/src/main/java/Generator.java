@@ -1,28 +1,28 @@
+import com.fasterxml.jackson.databind.ObjectMapper;
+import generators.TransactionGenerator;
 import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import parser.CommandsHandler;
-import parser.CsvParser;
-import utility.StringCommandToTransactionCommandConverter;
-
-import java.io.IOException;
+import readers.CommandLineParser;
+import readers.CommandLineReader;
+import readers.CsvFileReader;
+import writers.JsonFileWriter;
 
 public class Generator {
     private static final Logger logger = LogManager.getLogger(Generator.class);
 
     public static void main(String[] args) throws ParseException{
-
-        CommandsHandler commandsHandler = new CommandsHandler(args);
-        new StringCommandToTransactionCommandConverter()
-                .convert(commandsHandler.getCmd())
+        CsvFileReader csvFileReader = new CsvFileReader();
+        JsonFileWriter jsonFileWriter = new JsonFileWriter(new ObjectMapper());
+        CommandLineReader commandLineReader = CommandLineReader.readCommandLines(args);
+        new CommandLineParser()
+                .parseCommandLine(commandLineReader.getCmd())
                 .ifPresent( generateTransactionCommand-> {
                     try {
-                        TransactionGenerator transactionGenerator = new TransactionGenerator(generateTransactionCommand);
+                        TransactionGenerator transactionGenerator = new TransactionGenerator(csvFileReader, jsonFileWriter, generateTransactionCommand);
                         transactionGenerator.generateTransactions();
                         logger.info("Successfully generated transactions into " + generateTransactionCommand.getOutFilePath());
-                    } catch (IOException e) {
-                        logger.error("Couldn't generate transactions");
-                    } catch (CsvParser.InputItemFileNotFoundException e) {
+                    } catch (CsvFileReader.InputItemFileNotFoundException e) {
                         logger.error("Couldn't find input file");
                     }
                 });

@@ -1,17 +1,36 @@
+import generators.TransactionGenerator;
+import name.falgout.jeffrey.testing.junit5.MockitoExtension;
 import org.junit.jupiter.api.Test;
-import parser.GenerateTransactionCommand;
+import generators.GenerateTransactionCommand;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import readers.CsvFileReader;
 import utility.Tuple;
+import writers.JsonFileWriter;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
 class TransactionGeneratorTest {
     private TransactionGenerator transactionGenerator;
 
+    @Mock
+    private CsvFileReader csvFileReader;
+
+    @Mock
+    private JsonFileWriter jsonFileWriter;
+
     @Test
-    void shouldGenerateTransactions()  throws IOException{
+    void shouldGenerateTransactions(){
         // given
-        transactionGenerator = new TransactionGenerator(new GenerateTransactionCommand(
+        when(csvFileReader.getItems(Mockito.any())).thenReturn(Arrays.asList(new Tuple<String, Double>("a", 5.0), new Tuple<String, Double>("b", 11.0)));
+        transactionGenerator = new TransactionGenerator(csvFileReader, jsonFileWriter, new GenerateTransactionCommand(
                 new Tuple<>(1,5),
                 new Tuple<>(LocalDateTime.now(), LocalDateTime.of(2018, 2, 2,2,2)),
                 new Tuple<>(1,5),
@@ -23,6 +42,7 @@ class TransactionGeneratorTest {
         transactionGenerator.generateTransactions();
         // when
         // then
+        assertTrue(true);
     }
 
 }

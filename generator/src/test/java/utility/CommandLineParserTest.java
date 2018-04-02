@@ -3,18 +3,19 @@ package utility;
 import org.apache.commons.cli.ParseException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import parser.CommandsHandler;
+import readers.CommandLineReader;
+import readers.CommandLineParser;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class StringCommandToTransactionCommandConverterTest {
-    private CommandsHandler commandsHandler;
-    private StringCommandToTransactionCommandConverter converter;
+class CommandLineParserTest {
+    private CommandLineReader commandLineReader;
+    private CommandLineParser converter;
 
     @BeforeEach
     void setConverter(){
-        converter = new StringCommandToTransactionCommandConverter();
+        converter = new CommandLineParser();
     }
 
     @Test
@@ -30,10 +31,10 @@ class StringCommandToTransactionCommandConverterTest {
                 "-eventsCount", "1000",
                 "-outDir", "./output",
         };
-        commandsHandler = new CommandsHandler(args);
+        commandLineReader = CommandLineReader.readCommandLines(args);
         // when
         // then
-        assertEquals( 1000, converter.convert(commandsHandler.getCmd()).get().getEventsCount());
+        assertEquals( 1000, converter.parseCommandLine(commandLineReader.getCmd()).get().getEventsCount());
     }
 
     @Test
@@ -48,11 +49,11 @@ class StringCommandToTransactionCommandConverterTest {
                 "-eventsCount", "1000",
                 "-outDir", "./output",
         };
-        commandsHandler = new CommandsHandler(args);
+        commandLineReader = CommandLineReader.readCommandLines(args);
         // when
         // then
-        assertThrows(StringCommandToTransactionCommandConverter.WrongRangeException.class,
-                () -> converter.convert(commandsHandler.getCmd()));
+        assertThrows(CommandLineParser.WrongRangeException.class,
+                () -> converter.parseCommandLine(commandLineReader.getCmd()));
     }
 
 

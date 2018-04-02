@@ -1,4 +1,4 @@
-package parser;
+package readers;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
@@ -11,11 +11,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.List;
 
-public class CsvParser {
-    private static final Logger logger = LogManager.getLogger(CsvParser.class);
+public class CsvFileReader {
+    private static final Logger logger = LogManager.getLogger(CsvFileReader.class);
 
-    public ArrayList<Tuple<String, Double>> getItems(String path){
+    public List<Tuple<String, Double>> getItems(String path){
         ClassLoader classLoader = getClass().getClassLoader();
         Iterable<CSVRecord> records;
         Reader in;
@@ -43,7 +44,7 @@ public class CsvParser {
         }
     }
 
-    protected ArrayList<Tuple<String, Double>> returnItems(Iterable<CSVRecord> records){
+    protected List<Tuple<String, Double>> returnItems(Iterable<CSVRecord> records){
         records.iterator().next();
         ArrayList<Tuple<String, Double>> items = new ArrayList<>();
 

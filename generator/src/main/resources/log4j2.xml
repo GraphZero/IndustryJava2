@@ -23,14 +23,17 @@
         <Logger name="Generator" level="info" additivity="true">
             <appender-ref ref="fileLogger" level="info" />
         </Logger>
-        <Logger name="CsvParser" level="info" additivity="true">
+        <Logger name="CsvFileReader" level="info" additivity="true">
             <appender-ref ref="fileLogger" level="info" />
         </Logger>
-        <Logger name="StringCommandToTransactionCommandConverter" level="info" additivity="true">
+        <Logger name="CommandLineParser" level="info" additivity="true">
             <appender-ref ref="console" level="info" />
         </Logger>
-        <Logger name="TransactionGenerator" level="info" additivity="true">
+        <Logger name="generators.TransactionGenerator" level="info" additivity="true">
             <appender-ref ref="console" level="info" />
+        </Logger>
+        <Logger name="JsonFileWriter" level="error" additivity="true">
+            <appender-ref ref="console" level="error" />
         </Logger>
         <Root level="info" additivity="false">
             <appender-ref ref="console" />

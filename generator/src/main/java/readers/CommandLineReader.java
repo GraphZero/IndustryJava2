@@ -1,15 +1,16 @@
-package parser;
+package readers;
 import lombok.Getter;
 import org.apache.commons.cli.*;
+import org.apache.commons.cli.CommandLineParser;
 
 
 @Getter
-public class CommandsHandler {
+public class CommandLineReader {
     private final Options options = new Options();
     private final CommandLineParser parser = new DefaultParser();
     private CommandLine cmd;
 
-    public CommandsHandler(String[] args) throws ParseException {
+    private CommandLineReader(String[] args) throws ParseException  {
         options.addOption("customerIds", true, "gets customer id");
         options.addOption("dateRange", true, "date range");
         options.addOption("itemsFile", true, "item source file");
@@ -18,6 +19,10 @@ public class CommandsHandler {
         options.addOption("eventsCount", true, "number of transactions");
         options.addOption("outDir", true, "destination file");
         cmd = parser.parse( options, args);
+    }
+
+    public static CommandLineReader readCommandLines(String[] args) throws ParseException {
+        return new CommandLineReader(args);
     }
 
 }

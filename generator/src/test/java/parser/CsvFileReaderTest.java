@@ -1,22 +1,24 @@
 package parser;
 
 import org.junit.jupiter.api.Test;
+import readers.CsvFileReader;
 import utility.Tuple;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class CsvParserTest {
+class CsvFileReaderTest {
     private final String fileName = "testItems.csv";
 
     @Test
     void shouldReturnItemsFromCsvFileInResourcesFolder(){
         // given
-        CsvParser csvParser = new CsvParser();
+        CsvFileReader csvFileReader = new CsvFileReader();
         // when
-        ArrayList<Tuple<String, Double>> items = csvParser.getItems(fileName);
+        List<Tuple<String, Double>> items = csvFileReader.getItems(fileName);
         // then
         assertEquals(3, items.size());
     }
@@ -24,10 +26,10 @@ class CsvParserTest {
     @Test
     void shouldntFindFile(){
         // given
-        CsvParser csvParser = new CsvParser();
+        CsvFileReader csvFileReader = new CsvFileReader();
         // when
         // then
-        assertThrows(CsvParser.InputItemFileNotFoundException.class, () -> csvParser.getItems("asdasdasd"));
+        assertThrows(CsvFileReader.InputItemFileNotFoundException.class, () -> csvFileReader.getItems("asdasdasd"));
     }
 
 }

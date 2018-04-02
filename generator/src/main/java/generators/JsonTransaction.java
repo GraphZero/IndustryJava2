@@ -1,4 +1,4 @@
-package jsons;
+package generators;
 
 import lombok.Value;
 
