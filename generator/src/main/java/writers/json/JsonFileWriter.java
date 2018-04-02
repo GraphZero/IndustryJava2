@@ -1,16 +1,17 @@
-package writers;
+package writers.json;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import generators.JsonTransaction;
+import generators.Transaction;
 import generators.TransactionGenerator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import writers.IFileWriter;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class JsonFileWriter{
+public class JsonFileWriter implements IFileWriter {
     private static final Logger logger = LogManager.getLogger(TransactionGenerator.class);
     private final ObjectMapper objectMapper;
 
@@ -18,7 +19,8 @@ public class JsonFileWriter{
         this.objectMapper = objectMapper;
     }
 
-    public void writeValue(String filePath, ArrayList<JsonTransaction> transactionsToSave){
+    @Override
+    public void writeValue(String filePath, ArrayList<Transaction> transactionsToSave){
         try {
             objectMapper.writeValue(new File(filePath+ ".json"), transactionsToSave);
             logger.info("Saved transactions.");

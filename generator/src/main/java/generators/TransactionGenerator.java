@@ -5,7 +5,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import readers.CsvFileReader;
 import utility.Tuple;
-import writers.JsonFileWriter;
+import writers.IFileWriter;
+import writers.json.JsonFileWriter;
+import writers.json.JsonItem;
+import writers.json.JsonTransaction;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -18,24 +21,24 @@ import static generators.TransactionGenerator.RandomDataHelper.getRandomIntWithB
 public class TransactionGenerator {
     private static final Logger logger = LogManager.getLogger(TransactionGenerator.class);
     private final List<Tuple<String, Double>> rawItems;
-    private final JsonFileWriter jsonFileWriter;
+    private final IFileWriter fileWriter;
     @Setter private GenerateTransactionCommand command;
 
-    public TransactionGenerator(CsvFileReader csvFileReader, JsonFileWriter jsonFileWriter, GenerateTransactionCommand command) {
-        this.jsonFileWriter = jsonFileWriter;
+    public TransactionGenerator(CsvFileReader csvFileReader, JsonFileWriter fileWriter, GenerateTransactionCommand command) {
+        this.fileWriter = fileWriter;
         this.command = command;
         this.rawItems = csvFileReader.getItems(command.getItemsFilePath());
     }
 
     public void generateTransactions() {
-        ArrayList<JsonTransaction> transactionsToSave = new ArrayList<>();
+        ArrayList<Transaction> transactionsToSave = new ArrayList<>();
         for (int i = 1; i <= command.getEventsCount(); i++) {
-            transactionsToSave.add(generateSingleTransaction(command, i));
+            transactionsToSave.add(generateSingleTransaction(i));
         }
-        jsonFileWriter.writeValue(command.getOutFilePath(), transactionsToSave);
+        fileWriter.writeValue(command.getOutFilePath(), transactionsToSave);
     }
 
-    public JsonTransaction generateSingleTransaction(GenerateTransactionCommand command, int id) {
+    public Transaction generateSingleTransaction(int id) {
         ArrayList<JsonItem> items =
                 generateItems(command, getRandomIntWithBound(command.getGeneratedItemsRange().getFirst(), command.getGeneratedItemsRange().getSecond()));
         return new JsonTransaction(id,

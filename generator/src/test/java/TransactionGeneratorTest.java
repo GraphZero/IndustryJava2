@@ -7,9 +7,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import readers.CsvFileReader;
 import utility.Tuple;
-import writers.JsonFileWriter;
+import writers.json.JsonFileWriter;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 

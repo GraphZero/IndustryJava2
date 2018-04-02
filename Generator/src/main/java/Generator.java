@@ -6,7 +6,7 @@ import org.apache.logging.log4j.Logger;
 import readers.CommandLineParser;
 import readers.CommandLineReader;
 import readers.CsvFileReader;
-import writers.JsonFileWriter;
+import writers.json.JsonFileWriter;
 
 public class Generator {
     private static final Logger logger = LogManager.getLogger(Generator.class);
