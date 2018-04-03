@@ -13,3 +13,8 @@ Z jakiegoś powodu główna klasa Znajduje się w module generator (Generator/sr
 
 ## Zad 2 
 Dodałem plik konfiguracyjny log4j2 w D:\Java Produkcyjna\Lab 2\w2Test\generator\src\main\resources\log4j2.xml, dodałem logowanie do klas.
+
+# LAb 4
+
+## Zad 2
+Zmiany w pakietach, dodanie wymaganej implementacji. 
