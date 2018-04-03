@@ -29,6 +29,12 @@ dependencies {
     // https://mvnrepository.com/artifact/org.apache.commons/commons-csv
     compile group: 'org.apache.commons', name: 'commons-csv', version: '1.5'
 
+    // https://mvnrepository.com/artifact/name.falgout.jeffrey.testing.junit5/mockito-extension
+    compile group: 'name.falgout.jeffrey.testing.junit5', name: 'mockito-extension', version: '1.0.0'
+
+    // https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-yaml
+    compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.9.5'
+
     compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.1'
     compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.1'
 

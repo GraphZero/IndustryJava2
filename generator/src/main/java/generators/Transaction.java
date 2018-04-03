@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import writers.json.JsonItem;
 
 import java.util.ArrayList;
 
@@ -12,10 +11,10 @@ import java.util.ArrayList;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public abstract class Transaction {
+public class Transaction {
     protected long id;
     protected String timeStamp;
     protected long customer_id;
-    protected ArrayList<JsonItem> jsonItems;
+    protected ArrayList<? extends Item> jsonItems;
     protected double sum;
 }

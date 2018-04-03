@@ -18,6 +18,7 @@ public class CommandLineReader {
         options.addOption("itemsQuantity", true, "quantity of item");
         options.addOption("eventsCount", true, "number of transactions");
         options.addOption("outDir", true, "destination file");
+        options.addOption("format", true, "format of file");
         cmd = parser.parse( options, args);
     }
 

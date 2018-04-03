@@ -29,14 +29,15 @@ class TransactionGeneratorTest {
     void shouldGenerateTransactions(){
         // given
         when(csvFileReader.getItems(Mockito.any())).thenReturn(Arrays.asList(new Tuple<String, Double>("a", 5.0), new Tuple<String, Double>("b", 11.0)));
-        transactionGenerator = new TransactionGenerator(csvFileReader, jsonFileWriter, new GenerateTransactionCommand(
+        transactionGenerator = new TransactionGenerator(csvFileReader, new GenerateTransactionCommand(
                 new Tuple<>(1,5),
                 new Tuple<>(LocalDateTime.now(), LocalDateTime.of(2018, 2, 2,2,2)),
                 new Tuple<>(1,5),
                 new Tuple<>(1,50),
                 5,
                 "testItems.csv",
-                "D:\\Java Produkcyjna\\Lab 2\\w2Test\\generator\\src\\main\\resources\\output"
+                "D:\\Java Produkcyjna\\Lab 2\\w2Test\\generator\\src\\main\\resources\\output",
+                GenerateTransactionCommand.FileType.JSON
         ));
         transactionGenerator.generateTransactions();
         // when

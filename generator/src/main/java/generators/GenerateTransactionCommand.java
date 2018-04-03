@@ -15,5 +15,13 @@ public class GenerateTransactionCommand {
     private long eventsCount;
     private String itemsFilePath;
     private String outFilePath;
+    private FileType fileType;
+
+    public enum FileType{
+        XML,
+        JSON,
+        YAML
+    }
+
 }
 

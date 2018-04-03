@@ -22,7 +22,8 @@ public class CommandLineParser {
                     parseRange(commandLine.getOptionValue("itemsQuantity", "1:5")),
                     Long.parseLong( commandLine.getOptionValue("eventsCount", "100") ),
                     commandLine.getOptionValue("itemsFile", "/"),
-                    commandLine.getOptionValue("outDir", "/")
+                    commandLine.getOptionValue("outDir", "/"),
+                    parseFileType (commandLine.getOptionValue("format", "JSON"))
             );
             logger.info("Successfully converted command.");
         } catch(NumberFormatException e){
@@ -43,6 +44,10 @@ public class CommandLineParser {
     protected Tuple<LocalDateTime, LocalDateTime> parseDateRange(String s){
         String[] idRange = s.trim().split("-0100:");
         return new Tuple<>(LocalDateTime.parse(idRange[0] ), LocalDateTime.parse(idRange[1].replaceAll("-0100", "") ));
+    }
+
+    protected GenerateTransactionCommand.FileType parseFileType(String format){
+        return GenerateTransactionCommand.FileType.valueOf(format.toUpperCase());
     }
 
     public class WrongRangeException extends RuntimeException{}
