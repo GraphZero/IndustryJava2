@@ -17,6 +17,9 @@ import writers.yaml.YamlFileWriter;
 import writers.yaml.YamlItem;
 import writers.yaml.YamlTransaction;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,8 +51,15 @@ public class TransactionGenerator {
 
             case XML:
                 logger.info("Choose XML file format.");
-                fileWriter = new XmlFileWriter();
-                generateConcreteTransactions(xmlTransactionSupplier(), xmlItemSupplier());
+                JAXBContext jaxbContext;
+                try {
+                    jaxbContext = JAXBContext.newInstance(XmlTransaction.class, Transaction.class, XmlItem.class, Item.class);
+                    fileWriter = new XmlFileWriter(jaxbContext.createMarshaller());
+                    generateConcreteTransactions(xmlTransactionSupplier(), xmlItemSupplier());
+                } catch (JAXBException e) {
+                    logger.error("Couldn't initialize jaxb context.");
+                    e.printStackTrace();
+                }
                 break;
 
             case YAML:
@@ -128,7 +138,6 @@ public class TransactionGenerator {
         T supply(int id, ArrayList<E> items );
     }
 
-
     static class RandomDataHelper {
         private static final Random r = new Random();
 
@@ -141,7 +150,6 @@ public class TransactionGenerator {
         }
 
     }
-
 
 }
 
