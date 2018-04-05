@@ -29,45 +29,64 @@ import java.util.function.BiFunction;
 import static generators.TransactionGenerator.RandomDataHelper.getRandomDateTime;
 import static generators.TransactionGenerator.RandomDataHelper.getRandomIntWithBound;
 
+/**
+ * TODO: Wrap random file generators
+ */
 public class TransactionGenerator {
     private static final Logger logger = LogManager.getLogger(TransactionGenerator.class);
     private final List<Tuple<String, Double>> rawItems;
     private IFileWriter fileWriter;
     @Setter private GenerateTransactionCommand command;
 
-    public TransactionGenerator(CsvFileReader csvFileReader, GenerateTransactionCommand command) {
+    private TransactionGenerator(CsvFileReader csvFileReader, GenerateTransactionCommand command) {
         this.command = command;
         this.rawItems = csvFileReader.getItems(command.getItemsFilePath());
+    }
+
+    public static TransactionGenerator createTransactionGeneratorAndParseItems(CsvFileReader csvFileReader, GenerateTransactionCommand command) {
+        return new TransactionGenerator(csvFileReader, command);
     }
 
     public void generateTransactions(){
         switch (command.getFileType()){
             case JSON:
             default:
-                logger.info("Choose JSON file format.");
-                fileWriter = new JsonFileWriter(new ObjectMapper());
-                generateConcreteTransactions(jsonTransactionSupplier(), jsonItemSupplier());
+                generateJsons();
                 break;
 
             case XML:
-                logger.info("Choose XML file format.");
-                JAXBContext jaxbContext;
-                try {
-                    jaxbContext = JAXBContext.newInstance(XmlTransaction.class, Transaction.class, XmlItem.class, Item.class);
-                    fileWriter = new XmlFileWriter(jaxbContext.createMarshaller());
-                    generateConcreteTransactions(xmlTransactionSupplier(), xmlItemSupplier());
-                } catch (JAXBException e) {
-                    logger.error("Couldn't initialize jaxb context.");
-                    e.printStackTrace();
-                }
+                generateXml();
                 break;
 
             case YAML:
-                logger.info("Choose YAML file format.");
-                fileWriter = new YamlFileWriter(new ObjectMapper());
-                generateConcreteTransactions(yamlTransactionSupplier(), yamlItemSupplier());
+                generateYaml();
                 break;
         }
+    }
+
+    protected void generateJsons(){
+        logger.info("Choose JSON file format.");
+        fileWriter = new JsonFileWriter(new ObjectMapper());
+        generateConcreteTransactions(jsonTransactionSupplier(), jsonItemSupplier());
+    }
+
+    protected void generateXml(){
+        logger.info("Choose XML file format.");
+        JAXBContext jaxbContext;
+        try {
+            jaxbContext = JAXBContext.newInstance(XmlTransaction.class, Transaction.class, XmlItem.class, Item.class);
+            fileWriter = new XmlFileWriter(jaxbContext.createMarshaller());
+            generateConcreteTransactions(xmlTransactionSupplier(), xmlItemSupplier());
+        } catch (JAXBException e) {
+            logger.error("Couldn't initialize jaxb context.");
+            e.printStackTrace();
+        }
+    }
+
+    protected void generateYaml(){
+        logger.info("Choose YAML file format.");
+        fileWriter = new YamlFileWriter(new ObjectMapper());
+        generateConcreteTransactions(yamlTransactionSupplier(), yamlItemSupplier());
     }
 
     protected  <T extends Transaction, E extends Item> void generateConcreteTransactions(TransactionSupplier<T, E> transactionSupplier, BiFunction<Integer, Integer, E> itemsSupplier) {

@@ -16,7 +16,7 @@ public class Generator {
                 .parseCommandLine(commandLineReader.getCmd())
                 .ifPresent( generateTransactionCommand-> {
                     try {
-                        TransactionGenerator transactionGenerator = new TransactionGenerator(csvFileReader, generateTransactionCommand);
+                        TransactionGenerator transactionGenerator = TransactionGenerator.createTransactionGeneratorAndParseItems(csvFileReader, generateTransactionCommand);
                         transactionGenerator.generateTransactions();
                     } catch (CsvFileReader.InputItemFileNotFoundException e) {
                         logger.error("Couldn't find input file");
