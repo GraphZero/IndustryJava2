@@ -1,6 +1,5 @@
 package uj.jwzp.w2.e3;
 
-import uj.jwzp.w2.e3.external.DiscountsConfig;
 import uj.jwzp.w2.e3.external.PersistenceLayer;
 
 import java.math.BigDecimal;
@@ -8,31 +7,39 @@ import java.math.BigDecimal;
 public class SellingService {
 
     private final PersistenceLayer persistenceLayer;
+    private final DiscountConfigWrapper discountConfigWrapper;
     final CustomerMoneyService moneyService;
 
-    public SellingService(PersistenceLayer persistenceLayer) {
+    public SellingService(PersistenceLayer persistenceLayer, DiscountConfigWrapper discountConfigWrapper, CustomerMoneyService moneyService) {
         this.persistenceLayer = persistenceLayer;
+        this.discountConfigWrapper = discountConfigWrapper;
         this.persistenceLayer.loadDiscountConfiguration();
-        this.moneyService = new CustomerMoneyService(this.persistenceLayer);
+        this.moneyService = moneyService;
     }
 
     public boolean sell(Item item, int quantity, Customer customer) {
         BigDecimal money = moneyService.getMoney(customer);
-        BigDecimal price = item.getPrice().subtract(DiscountsConfig.getDiscountForItem(item, customer)).multiply(BigDecimal.valueOf(quantity));
-        boolean isItemDiscounted = false;
-        if (DiscountsConfig.isWeekendPromotion() && price.compareTo(BigDecimal.valueOf(5)) > 0) {
-            price = price.subtract(BigDecimal.valueOf(3));
-            isItemDiscounted = true;
+        BigDecimal price = calculatePriceOfItemForUser(item, quantity, customer);
+        boolean isItemDiscounted = isItemDiscounted(price);
+        if (isItemDiscounted) updatePrice(price);
+        boolean sold = moneyService.pay(customer, price);
+        if (sold) {
+            return persistenceLayer.saveTransaction(customer, item, quantity);
+        } else {
+            return sold;
         }
-
-        if (!moneyService.pay(customer, price)) throw new ItemNotSoldException();
-        if (!persistenceLayer.saveTransaction(customer, item, quantity) ) throw new TransactionNotSavedException();
-
-        return isItemDiscounted;
     }
 
-    public class ItemNotSoldException extends RuntimeException{}
+    private BigDecimal calculatePriceOfItemForUser(Item item, int quantity, Customer customer) {
+        return item.getPrice().subtract(discountConfigWrapper.getDiscountForItem(item, customer)).multiply(BigDecimal.valueOf(quantity));
+    }
 
-    public class TransactionNotSavedException extends RuntimeException{}
+    public boolean isItemDiscounted(BigDecimal price) {
+        return (discountConfigWrapper.isWeekendPromotion() && price.compareTo(BigDecimal.valueOf(5)) > 0);
+    }
+
+    protected void updatePrice(BigDecimal price){
+        price = price.subtract(BigDecimal.valueOf(3));
+    }
 
 }
