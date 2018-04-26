@@ -13,6 +13,7 @@ import uj.jwzp.w2.e3.external.PersistenceLayer;
 
 import java.math.BigDecimal;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.*;
 
@@ -121,6 +122,17 @@ public class SellingServiceTest {
 
         //then
         assertFalse(isSold);
+    }
+
+    @Test
+    public void shouldUpdatePrice(){
+        // given
+        SellingService uut = new SellingService(persistenceLayer, discountConfigWrapper, customerMoneyService);
+        BigDecimal bigDecimal = BigDecimal.TEN;
+        // when
+        bigDecimal = uut.updatePrice(bigDecimal);
+        // then
+        assertEquals( BigDecimal.valueOf(7), bigDecimal);
     }
 
 }

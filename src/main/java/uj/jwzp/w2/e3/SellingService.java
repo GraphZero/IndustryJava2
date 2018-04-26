@@ -21,7 +21,7 @@ public class SellingService {
         BigDecimal money = moneyService.getMoney(customer);
         BigDecimal price = calculatePriceOfItemForUser(item, quantity, customer);
         boolean isItemDiscounted = isItemDiscounted(price);
-        if (isItemDiscounted) updatePrice(price);
+        if (isItemDiscounted) price = updatePrice(price);
         boolean sold = moneyService.pay(customer, price);
         if (sold) {
             return persistenceLayer.saveTransaction(customer, item, quantity);
@@ -38,8 +38,8 @@ public class SellingService {
         return (discountConfigWrapper.isWeekendPromotion() && price.compareTo(BigDecimal.valueOf(5)) > 0);
     }
 
-    protected void updatePrice(BigDecimal price){
-        price = price.subtract(BigDecimal.valueOf(3));
+    protected BigDecimal updatePrice(BigDecimal price){
+        return price.subtract(BigDecimal.valueOf(3));
     }
 
 }
