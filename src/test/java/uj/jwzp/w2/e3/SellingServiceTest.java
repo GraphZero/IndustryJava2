@@ -58,7 +58,6 @@ public class SellingServiceTest {
         when(customerMoneyService.getMoney(Mockito.any())).thenReturn(BigDecimal.valueOf(10));
         when(discountConfigWrapper.isWeekendPromotion()).thenReturn(Boolean.TRUE);
         when(discountConfigWrapper.getDiscountForItem(Mockito.any(), Mockito.any() )).thenReturn(BigDecimal.valueOf(1));
-        //when(uut.isItemDiscounted(Mockito.any())).thenReturn(Boolean.TRUE);
         Item i = new Item("i", new BigDecimal(7));
         Customer c = new Customer(1, "DasCustomer", "Kraków, Łojasiewicza");
 
@@ -67,6 +66,19 @@ public class SellingServiceTest {
 
         //then
         verify(uut, times(1)).updatePrice(Mockito.any());
+    }
+
+    @Test
+    public void shouldCorrectlyApplyDiscountToPrice() {
+        //given
+        SellingService uut = new SellingService(persistenceLayer, discountConfigWrapper, customerMoneyService);
+
+        //when
+        BigDecimal price = BigDecimal.TEN;
+        BigDecimal updatedPrice = uut.updatePrice(price);
+
+        //then
+        assertEquals(BigDecimal.valueOf(7), updatedPrice);
     }
 
     @Test
